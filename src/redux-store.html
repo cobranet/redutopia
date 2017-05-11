@@ -1,0 +1,27 @@
+<link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<script>
+ const initalState = {
+     sites: [{name: "Halebeard Peak", placeid: 0 },
+	     {name: "The Great Wilds", placeid: 1 },
+	     {name: "Root Stranged Marshes", placeid: 2 },
+	     {name: "Glassrock Canyon", placeid: 3 },
+	     {name: "Ruined City of the Ancients", placeid: 4 },
+	     {name: "The Fiery Maw", placeid: 5 }
+            ],
+     active_site: 0
+ }
+ const reducer = function(state,action) {
+     if(!state){
+	 return initalState;
+     }
+     switch(action.type){
+	 case "SELECT_SITE":
+	     const sites = state.sites.slice(0);
+	     const active_site= action.selectedSite;
+	     return Object.assign({},state,{sites: sites,active_site: active_site});
+     }
+ };
+
+ const store = Redux.createStore(reducer);
+ const ReduxBehavior = PolymerRedux(store);
+</script>

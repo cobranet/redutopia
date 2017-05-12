@@ -12,7 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
-<dom-module id="u2-site">
+<dom-module id="u2-active-site">
   <template>
       <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
@@ -23,15 +23,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	 color: red;
      }
      .imgs {
-	 width: 150px;
-	 heigth: 250px;
-       }
-       .name {
-	   font-size: 70%;
-       }
-    </style>
-
-    
+	 width: 300px;
+	 heigth: 500px;
+     }
+      </style>
     <div class="site {{selected}}" >
 	<div class="layout vertical">
 	    <img class="imgs" src="/images/sites/{{image}}">
@@ -43,7 +38,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-	is: 'u2-site',
+	is: 'u2-active-site',
 	behaviors: [ReduxBehavior],
 	actions: {
 	    select: function(placeid){
@@ -55,7 +50,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	},
 	properties: {
 	    placeid: {
-		type: Number
+		type: Number,
+		statePath: function(state) { return state.active_site; }
 	    },
 	    image: {
 		type: String,

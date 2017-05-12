@@ -9,24 +9,34 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
 <link rel="import" href="u2-site.html">
+<link rel="import" href="u2-active-site.html">
+
 <dom-module id="my-view1">
   <template>
-    <style include="shared-styles">
+      <style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
       :host {
         display: block;
 
         padding: 10px;
       }
-    </style>
+      </style>
 
-    <div class="card">
-	<h1></h1>
-	<template is="dom-repeat" items="[[sites]]">
-	    <u2-site placeid="{{index}}"></u2-site>
-	</template>
+    <div class="card layout horizontal wrap">
+	<div class="active_site flex ">
+	    <u2-active-site></u2-active-site>
+	</div>
+	<div class="sites flex ">
+	    <div class="layout horizontal wrap">
+		<template is="dom-repeat" items="[[sites]]">
+		    <u2-site placeid="{{index}}"></u2-site>
+		</template>
+	    </div>
+	</div>
   </template>
 
   <script>
@@ -46,6 +56,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		type: Number,
 		computed: 'computeSitesCount(sites)'
 	    }
+	   
+	},
+	_active: function(){
+	    alert(this.active_site);
+	    return this.active_site;
 	},
 	computeSitesCount: function(sites){
 	    return sites.length;

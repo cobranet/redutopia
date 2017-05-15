@@ -1,14 +1,20 @@
 <link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
 <script>
  const initalState = {
-     sites: [{name: "Halebeard Peak", placeid: 0 , imagename: "castle.png" },
-	     {name: "The Great Wilds", placeid: 1, imagename: "desert.png" },
-	     {name: "Root Stranged Marshes", placeid: 2 , imagename: "forest.png" },
-	     {name: "Glassrock Canyon", placeid: 3 , imagename: "island.png"},
-	     {name: "Ruined City of the Ancients", placeid: 4, imagename: "swamp.png" },
-	     {name: "The Fiery Maw", placeid: 5 , imagename: "pole.png" }
+     sites: [{name: "Halebeard Peak", placeid: 0 , imagename: "castle.png",
+              construct: "Seal of Balance", component: "Silver", treasure: "Ice Plate"  },
+	     {name: "The Great Wilds", placeid: 1, imagename: "desert.png",
+	      construct: "Hermetic Mirror", component: "Quartz", treasure: "Bracelet of Ios"  },
+	     {name: "Root Stranged Marshes", placeid: 2 , imagename: "forest.png",
+	      construct: "Void Gate", component: "Gum", treasure: "Shimmering Moonlice"  },
+	     {name: "Glassrock Canyon", placeid: 3 , imagename: "island.png",
+	      construct: "Golden Chassis", component: "Silica", treasure: "Scale of Infinity Wurm" },
+	     {name: "Ruined City", placeid: 4, imagename: "swamp.png",
+              construct: "Scrying Lens", component: "Wax", treasure: "The Ancient Record"  },
+	     {name: "The Fiery Maw", placeid: 5 , imagename: "pole.png",
+	      construct: "Crystal Battery", component: "Lead", treasure: "The Molten Shard"  },
             ],
-     active_site: 0
+     active_site: 3
  }
  const reducer = function(state,action) {
      if(!state){

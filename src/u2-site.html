@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <style include="shared-styles iron-flex iron-flex-alignment">
       :host {
         display: flex;
-        padding: 10px;
+        padding: 3px;
       }
      .active {
 	 color: red;
@@ -28,14 +28,41 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        }
        .name {
 	   font-size: 70%;
+	   color: black;
+	   position: relative;
+	   text-shadow: 2px -2px #ffffff;
+	   left: 5px;
+	   top: -60px;
+       }
+       .construct {
+	   font-size: 50%;
+	   color: black;
+	   position: relative;
+	   text-shadow: 1px -1px #ffffff;
+	   left: 5px;
+	   top: -150px;
        }
     </style>
 
     
     <div class="site {{selected}}" >
 	<div class="layout vertical">
-	    <img class="imgs" src="/images/sites/{{image}}">
-	    <div class="name">[[name]]</div>
+	    <div>
+		<img class="imgs" src="/images/sites/{{image}}" on-tap="_selectSite" >
+		<div class="construct">
+		    <div>
+			Construct: [[construct]]
+		    </div>
+		    <div>
+		        Component: [[component]]
+		    </div>
+		    <div>
+		        Treasure: [[treasure]]
+		    </div>
+		</div>
+		<div class="name">[[name]]</div>
+	    </div>
+
 	</div>
 
     </div>
@@ -56,6 +83,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	properties: {
 	    placeid: {
 		type: Number
+	    },
+	    component: {
+		type: String,
+		statePath: function(state) { return state.sites[this.placeid].component; }
+	    },
+	    treasure: {
+		type: String,
+		statePath: function(state) { return state.sites[this.placeid].treasure; }
+	    },
+	    construct: {
+		type: String,
+		statePath: function(state) { return state.sites[this.placeid].construct; }
 	    },
 	    image: {
 		type: String,

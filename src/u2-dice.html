@@ -1,0 +1,53 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer.html">
+<dom-module id="ue-dice">
+    <link rel="stylesheet" href="ue-dice.css">
+    <template >
+	<span on-tap="handleTap">
+	    <svg  height$="{{dice.dicesize}}" width$="{{dice.dicesize}}" class="dice">
+		<rect fill$="{{dice.color}}"
+		      rx$= "{{part(dice.dicesize,8)}}"
+		      ry$= "{{part(dice.dicesize,8)}}"
+		      width$="{{dice.dicesize}}"
+		      height$="{{dice.dicesize}}"
+		>
+		</rect>
+		<circle cy$="{{cy(dice.dicesize,4)}}",
+			cx$="{{cx(dice.dicesize,4)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,4,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,1)}}",
+			cx$="{{cx(dice.dicesize,1)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,1,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,2)}}",
+			cx$="{{cx(dice.dicesize,2)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,2,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,3)}}",
+			cx$="{{cx(dice.dicesize,3)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,3,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,5)}}",
+			cx$="{{cx(dice.dicesize,5)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,5,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,6)}}",
+			cx$="{{cx(dice.dicesize,6)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,6,dice.color,dice.dotcolor)}}">
+		</circle>	
+		<circle cy$="{{cy(dice.dicesize,7)}}",
+			cx$="{{cx(dice.dicesize,7)}}",
+			r$="{{part(dice.dicesize,9)}}"
+			fill$="{{ccolor(dice.value,7,dice.color,dice.dotcolor)}}">
+		</circle>	
+	    </svg>
+	    <span>
+    </template>
+    <script src="ue-dice.js"></script>
+</dom-module>

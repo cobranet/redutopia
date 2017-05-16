@@ -1,20 +1,42 @@
 <link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<script src="reducers/search-reducer.js"></script>
+<script src="reducers/site-reducer.js"></script>
+<script src="utils.js"></script>
 <script>
+ 
+ const game = { names: ["Halebeard Peak" , "The Great Wilds", "Root Stranged Marshes", "Glassrock Canyon", "Ruined City", "The Fiery Maw"  ],
+		images: [ "castle.png", "desert.png", "forest.png" , "island.png" , "swamp.png", "pole.png" ],
+		constructs: [ "Seal of Balance", "Hermetic Mirror",  "Void Gate" , "Golden Chassis" , "Scrying Lens", "Crystal Battery"],
+		components: ["Silver", "Quartz", "Gum", "Silica", "Wax", "Lead" ],
+		treasures: ["Ice Plate", "Bracelet of Ios", "Shimmering Moonlice" , "Scale of Infinity Wurm", "The Ancient Record", "The Molten Shard" ],
+		initialState: function () {
+		    var i;
+		    var site;
+		    arr = [];
+		    for (i=0;i<6;i++) {
+			site = {};
+			site.name = game.names[i];
+			site.construct = game.constructs[i];
+			site.component = game.components[i];
+			site.imagename = game.images[i];
+			site.treasure = game.treasures[i];
+			site.placeid = i;
+			site.searches = [
+			    {score: 0, boxes: ["","","","","",""] , searchid: 0 , insearch: 0,dices:[] },
+			    {score: 0, boxes: ["","","","","",""] , searchid: 1 , insearch: 0,dices:[] },
+			    {score: 0, boxes: ["","","","","",""] , searchid: 2 , insearch: 0,dices:[] },
+			    {score: 0, boxes: ["","","","","",""] , searchid: 3 , insearch: 0,dices:[] },
+			    {score: 0, boxes: ["","","","","",""] , searchid: 4 , insearch: 0,dices:[] },
+			    {score: 0, boxes: ["","","","","",""] , searchid: 5 , insearch: 0,dices:[] }
+			],
+			arr.push(site);
+		    }
+		    return arr;
+		}
+ };
  const initalState = {
-     sites: [{name: "Halebeard Peak", placeid: 0 , imagename: "castle.png",
-              construct: "Seal of Balance", component: "Silver", treasure: "Ice Plate"  },
-	     {name: "The Great Wilds", placeid: 1, imagename: "desert.png",
-	      construct: "Hermetic Mirror", component: "Quartz", treasure: "Bracelet of Ios"  },
-	     {name: "Root Stranged Marshes", placeid: 2 , imagename: "forest.png",
-	      construct: "Void Gate", component: "Gum", treasure: "Shimmering Moonlice"  },
-	     {name: "Glassrock Canyon", placeid: 3 , imagename: "island.png",
-	      construct: "Golden Chassis", component: "Silica", treasure: "Scale of Infinity Wurm" },
-	     {name: "Ruined City", placeid: 4, imagename: "swamp.png",
-              construct: "Scrying Lens", component: "Wax", treasure: "The Ancient Record"  },
-	     {name: "The Fiery Maw", placeid: 5 , imagename: "pole.png",
-	      construct: "Crystal Battery", component: "Lead", treasure: "The Molten Shard"  },
-            ],
-     active_site: 3
+     sites: game.initialState(),
+     active_site: 0
  }
  const reducer = function(state,action) {
      if(!state){
@@ -24,7 +46,20 @@
 	 case "SELECT_SITE":
 	     const sites = state.sites.slice(0);
 	     const active_site= action.selectedSite;
-	     return Object.assign({},state,{sites: sites,active_site: active_site});
+	     var obj = Object.assign({},state,{sites: sites,active_site: active_site});
+	     return obj;
+	 case "TAP_CELL":
+	     var active = state.active_site;
+	     new_site = siteReducer(state.sites[active],action);
+	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     var obj = Object.assign({},state,{sites: new_sites});
+	     return obj;
+	 case "ROLL" :
+	     var active = state.active_site;
+	     new_site = siteReducer(state.sites[active],action);
+	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     var obj = Object.assign({},state,{sites: new_sites});
+	     return obj;
      }
  };
 

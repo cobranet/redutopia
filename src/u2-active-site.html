@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
+<link rel="import" href="u2-searches.html">
 <dom-module id="u2-active-site">
   <template>
       <style include="shared-styles iron-flex iron-flex-alignment">
@@ -27,11 +28,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	 heigth: 500px;
      }
       </style>
-    <div class="site {{selected}}" >
-	<div class="layout vertical">
-	    <img class="imgs" src="/images/sites/{{image}}">
-	    <div class="name">[[name]]</div>
-	</div>
+      <div class="active_site" >
+	  <div class="layout horizontal">
+	      <div class="layout vertical">
+		  <img class="imgs" src="/images/sites/{{image}}">
+		  <div class="name">[[name]]</div>
+	      </div>
+	      <div>
+		  <u2-searches searches="[[searches]]"></u2-searches>
+	      </div>
+	  <div>
 
     </div>
   </template>
@@ -40,14 +46,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Polymer({
 	is: 'u2-active-site',
 	behaviors: [ReduxBehavior],
-	actions: {
-	    select: function(placeid){
-		return {
-		    type: "SELECT_SITE",
-		    selectedSite: placeid
-		}
-	    }
-	},
 	properties: {
 	    placeid: {
 		type: Number,
@@ -55,27 +53,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    },
 	    image: {
 		type: String,
-		statePath: function(state) { return state.sites[this.placeid].imagename;  }
+		statePath: function(state) { return state.sites[state.active_site].imagename; }
 
 	    },
-	    selected: {
-		type: String,
-		statePath: function(state) {
-		    if ( state.active_site == this.placeid ) {
-			return "active";
-		    } else {
-			return "inactive";
-		    }
-		}
+	    searches : {
+		type: Array,
+		statePath: function(state) { return state.sites[state.active_site].searches; }
 	    },
 	    name: {
 		type: String,
-		statePath: function(state) { return state.sites[this.placeid].name; }
+		statePath: function(state) { return state.sites[state.active_site].name; }
 	    }
 	    
-	},
-	_selectSite: function(){  
-	    this.dispatch("select",this.placeid);
 	}
     });
   </script>

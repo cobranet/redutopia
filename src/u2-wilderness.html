@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="u2-site.html">
 <link rel="import" href="u2-active-site.html">
 
-<dom-module id="my-view1">
+<dom-module id="u2-wilderness">
   <template>
       <style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
       :host {
@@ -33,7 +33,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	<div class="sites flex ">
 	    <div class="layout horizontal wrap">
 		<template is="dom-repeat" items="[[sites]]">
-		    <u2-site placeid="{{index}}"></u2-site>
+		    <u2-site placeid="[[index]]" ></u2-site>
 		</template>
 	    </div>
 	</div>
@@ -41,7 +41,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   <script>
     Polymer({
-	is: 'my-view1',
+	is: 'u2-wilderness',
 	behaviors: [ReduxBehavior],
 	properties: {
 	    sites: {
@@ -59,7 +59,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   
 	},
 	_active: function(){
-	    alert(this.active_site);
 	    return this.active_site;
 	},
 	computeSitesCount: function(sites){

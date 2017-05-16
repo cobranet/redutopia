@@ -1,0 +1,136 @@
+<!--
+     @license
+     Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+     The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+     The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+     Code distributed by Google as part of the polymer project is also
+     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+   -->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="redux-store.html">
+<link rel="import" href="co-dice/co-dice.html">
+<dom-module id="u2-box">
+    <template>
+	<style include="shared-styles iron-flex iron-flex-alignment">
+	 :host {
+             display: flex;
+	     padding: 2px;
+	 }
+	 td {
+	     min-width: 20px;
+	     height: 20px;
+	     border: 1px solid black;
+	     padding: 0px;
+	     font-size: 80%;
+	     text-align: center;
+	 }
+	 co-dice {
+	     padding: 2px;
+	 }
+	 table {
+	     border: 1px solid gray;
+	 }
+	 paper-button {
+	     background-color: var(--paper-indigo-500);
+	     color: white;
+	 }
+	</style>
+	<div class="box">
+	    <div class="layout horizontal">
+		<table>
+		    <tr>
+			<td data-cell="0"  on-tap="_tapCell">[[boxes.0]]</td>
+			<td data-cell="1"  on-tap="_tapCell">[[boxes.1]]</td>
+			<td data-cell="2"  on-tap="_tapCell">[[boxes.2]]</td>
+		    </tr>
+		    <tr>
+			<td data-cell="3"  on-tap="_tapCell">[[boxes.3]]</td>
+			<td data-cell="4"  on-tap="_tapCell">[[boxes.4]]</td>
+			<td data-cell="5"  on-tap="_tapCell">[[boxes.5]]</td>
+		    </tr>
+		</table>
+		<div><paper-button hidden$="{{_computeHidden(insearch)}}" raised on-tap="_roll">Roll</paper-button></div>
+		<div hidden$="{{!_computeHidden(insearch)}}" >
+		    <div class="layout horizontal">
+		    <co-dice dicecolor="red" dotcolor="white" dicesize="[[_calcDiceSize1(insearch)]]" value="[[dices.0]]"  ></co-dice>
+		    <co-dice dicecolor="blue" dotcolor="white" dicesize="[[_calcDiceSize2(insearch)]]" value="[[dices.1]]"  ></co-dice>
+		    </div>
+		</div>
+	    </div>
+	</div>
+    </template>
+
+    <script>
+     Polymer({
+	 is: 'u2-box',
+	 behaviors: [ReduxBehavior],
+	 actions: {
+	     roll: function(search) {
+		 return {
+		     type: "ROLL",
+		     search: search
+		 }
+	     },
+	     tapCell: function(cell,search,dicevalue){
+		 return {
+		     type: "TAP_CELL",
+		     cell: cell,
+		     search: search,
+		     dicevalue: dicevalue }
+	     }
+	 },
+	 properties: {
+	     insearch: {
+		 type: Number
+	     },
+	     search:{
+		 type: Number
+	     },
+	     boxes: {
+		 type: Array
+	     },
+	     dices: {
+		 type: Array
+	     }
+	     
+	 },
+	 _computeHidden: function(insearch){
+	     if (insearch != 0 ) {
+		 return true;
+	     } else {
+		 return false;
+	     }
+	 },
+	 _roll: function(e){
+	     this.dispatch("roll",this.search);
+	 },
+	 _tapCell: function(e){
+	     if ( this.insearch == 1 || this.insearch == 2 ) { 
+		 this.dispatch("tapCell",
+			       e.target.getAttribute("data-cell"),
+			       this.search,
+		               this.dices[this.insearch-1]);
+	     }
+	 },
+	 _calcDiceSize1: function(){
+	     if (this.insearch == 1 ) {
+		 return 35;
+	     } else {
+		 return 25;
+	     }
+	 },
+	 _calcDiceSize2: function(){
+	     if (this.insearch == 2 ) {
+		 return 35;
+	     } else {
+		 return 25;
+	     }
+	 }
+     });
+    </script>
+</dom-module>

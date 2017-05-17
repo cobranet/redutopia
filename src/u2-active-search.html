@@ -13,7 +13,7 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
 <link rel="import" href="u2-box.html">
-<dom-module id="u2-searches">
+<dom-module id="u2-active-search">
     <template>
 	<style include="shared-styles iron-flex iron-flex-alignment">
 	 :host {
@@ -22,29 +22,20 @@
 	</style>
 	<div class="layout vertical">
 	    <template is="dom-repeat"  items="[[searches]]">
-		<u2-box active="[[_computeActive(index)]]"  dices="[[item.dices]]" search="[[index]]" boxes="[[item.boxes]]" insearch="[[item.insearch]]"></u2-box>
+		<u2-box dices="[[item.dices]]" search="[[index]]" boxes="[[item.boxes]]" insearch="[[item.insearch]]"></u2-box>
 	    </template>
 	</div>
     </template>
 
     <script>
      Polymer({
-	 is: 'u2-searches',
+	 is: 'u2-active-search',
 	 behaviors: [ReduxBehavior],
 	 properties: {
-	     active: {
-		 type: Number
-	     },
 	     searches: {
 		 type: Array
 	     }
 	     
-	 },
-	 _computeActive: function(index){
-	     if (index == this.active){
-		 return 1;
-	     }
-	     return 0;
 	 }
      });
     </script>

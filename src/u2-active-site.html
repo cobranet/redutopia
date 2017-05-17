@@ -35,7 +35,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		  <div class="name">[[name]]</div>
 	      </div>
 	      <div>
-		  <u2-searches searches="[[searches]]"></u2-searches>
+		  <u2-searches active="[[active_search]]"  searches="[[searches]]"></u2-searches>
 	      </div>
 	  <div>
 
@@ -50,6 +50,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	    placeid: {
 		type: Number,
 		statePath: function(state) { return state.active_site; }
+	    },
+	    active_search: {
+		type: Number,
+		statePath: function(state) {  return state.sites[state.active_site].active_search; }
 	    },
 	    image: {
 		type: String,

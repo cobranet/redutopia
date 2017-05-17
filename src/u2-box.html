@@ -54,8 +54,8 @@
 			<td data-cell="5"  on-tap="_tapCell">[[boxes.5]]</td>
 		    </tr>
 		</table>
-		<div><paper-button hidden$="{{_computeHidden(insearch)}}" raised on-tap="_roll">Roll</paper-button></div>
-		<div hidden$="{{!_computeHidden(insearch)}}" >
+		<div><paper-button hidden$="{{_computeHiddenButton(insearch,active)}}" raised on-tap="_roll">Roll</paper-button></div>
+		<div hidden$="{{_computeHiddenDice(insearch,active)}}" >
 		    <div class="layout horizontal">
 		    <co-dice dicecolor="red" dotcolor="white" dicesize="[[_calcDiceSize1(insearch)]]" value="[[dices.0]]"  ></co-dice>
 		    <co-dice dicecolor="blue" dotcolor="white" dicesize="[[_calcDiceSize2(insearch)]]" value="[[dices.1]]"  ></co-dice>
@@ -85,6 +85,9 @@
 	     }
 	 },
 	 properties: {
+	     active: {
+		 type: Number
+	     },
 	     insearch: {
 		 type: Number
 	     },
@@ -99,7 +102,16 @@
 	     }
 	     
 	 },
-	 _computeHidden: function(insearch){
+	 _computeHiddenDice: function(insearch,active){
+	     if (active == 0 ) return true;
+	     if( insearch != 0 ) return false;
+	     return true;
+	 },
+
+	 _computeHiddenButton: function(insearch,active){
+	     if ( active == 0 ) {
+		 return true;
+	     }
 	     if (insearch != 0 ) {
 		 return true;
 	     } else {
@@ -110,12 +122,10 @@
 	     this.dispatch("roll",this.search);
 	 },
 	 _tapCell: function(e){
-	     if ( this.insearch == 1 || this.insearch == 2 ) { 
 		 this.dispatch("tapCell",
 			       e.target.getAttribute("data-cell"),
 			       this.search,
 		               this.dices[this.insearch-1]);
-	     }
 	 },
 	 _calcDiceSize1: function(){
 	     if (this.insearch == 1 ) {

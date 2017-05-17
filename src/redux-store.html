@@ -21,6 +21,7 @@
 			site.imagename = game.images[i];
 			site.treasure = game.treasures[i];
 			site.placeid = i;
+			site.active_search = 0;
 			site.searches = [
 			    {score: 0, boxes: ["","","","","",""] , searchid: 0 , insearch: 0,dices:[] },
 			    {score: 0, boxes: ["","","","","",""] , searchid: 1 , insearch: 0,dices:[] },
@@ -60,6 +61,12 @@
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
 	     var obj = Object.assign({},state,{sites: new_sites});
 	     return obj;
+	 case "SEARCH":
+	     new_site = siteReducer(state.sites[active],action);
+	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     var obj = Object.assign({},state,{sites: new_sites});
+	     return obj;
+	     
      }
  };
 

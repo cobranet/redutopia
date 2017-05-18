@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer-redux/polymer-redux.html">
+<script src="logic/utopia.js"></script> 
 <script src="reducers/search-reducer.js"></script>
 <script src="reducers/site-reducer.js"></script>
 <script src="utils.js"></script>
@@ -9,26 +10,80 @@
 		constructs: [ "Seal of Balance", "Hermetic Mirror",  "Void Gate" , "Golden Chassis" , "Scrying Lens", "Crystal Battery"],
 		components: ["Silver", "Quartz", "Gum", "Silica", "Wax", "Lead" ],
 		treasures: ["Ice Plate", "Bracelet of Ios", "Shimmering Moonlice" , "Scale of Infinity Wurm", "The Ancient Record", "The Molten Shard" ],
-		initialState: function () {
+		monsters: [ [ { name: "Ice Bear", atk: [1],hit: [5,6],image: "bear.png" },
+			      { name: "Roving Bandits", atk: [1],hit: [6], image: "bandits.png" },
+			      { name: "Blod Wolves" , atk: [1,2], hit: [6], image: "wolves.png" },
+			      { name: "Horse Eater Hawk" , atk: [1,2,3], hit: [6], image: "hawk.png" },
+			      { name: "Giant of The Peaks" , atk: [1,2,3,4], hit: [6], image: "giant.png" }],
+			    [ { name: "Rouge Theif", atk: [1,2],hit: [5,6],image: "thief.png" },
+			      { name: "Blanket of Crows", atk: [1],hit: [6], image: "crows.png" },
+			      { name: "Hornback Bison" , atk: [1], hit: [6], image: "bison.png" },
+			      { name: "Grassyback Troll" , atk: [1,2,3], hit: [5-6], image: "troll.png" },
+			      { name: "Thunder King" , atk: [1,2,3,4], hit: [6], image: "thunder.png" }],
+			    [ { name: "Feisty Gremlin", atk: [1],hit: [5,6],image: "gremlin.png" },
+			      { name: "Glasswing Drake", atk: [1],hit: [6], image: "drake.png" },
+			      { name: "Reaching Claws" , atk: [1,2], hit: [6], image: "claws.png" },
+			      { name: "Terrible Worm" , atk: [1,2,3], hit: [6], image: "worm.png" },
+			      { name: "Leviathan Serpent" , atk: [1,2,3,4], hit: [6], image: "serpent.png" }],
+			    [ { name: "Gemscale Boa", atk: [1],hit: [5,6],image: "boa.png" },
+			      { name: "Ancient Aligator", atk: [1,2],hit: [6], image: "aligator.png" },
+			      { name: "Land Shark" , atk: [1,2], hit: [6], image: "shark.png" },
+			      { name: "Abysall Leech" , atk: [1,2,3], hit: [6], image: "leech.png" },
+			      { name: "Dweller in the Tides" , atk: [1,2,3,4], hit: [6], image: "dweller.png" }],
+			    [ { name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
+			      { name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
+			      { name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
+			      { name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
+			      { name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
+			    [ { name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
+			      { name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
+			      { name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
+			      { name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
+			      { name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
+			    [ { name: "Minor Imp", atk: [1],hit: [5,6],image: "imp.png" },
+			      { name: "Renegade Warlock", atk: [1-2],hit: [5-6], image: "warlock.png" },
+			      { name: "Gienat Flame Lizard" , atk: [1,2,3], hit: [5,6], image: "lizard.png" },
+			      { name: "Spark Elemental" , atk: [1,2,3], hit: [6], image: "elemental.png" },
+			      { name: "Volcano Spirit" , atk: [1,2,3,4], hit: [6], image: "spirit.png" }]
+			      ],
+		initialSites: function () {
 		    var i;
 		    var site;
 		    arr = [];
 		    for (i=0;i<6;i++) {
 			site = {};
 			site.name = game.names[i];
+			site.foundconstruct = 0;
+			site.last_found = 0;
 			site.construct = game.constructs[i];
 			site.component = game.components[i];
 			site.imagename = game.images[i];
 			site.treasure = game.treasures[i];
 			site.placeid = i;
 			site.active_search = 0;
+			site.monsters = game.monsters[i];
+			site.infight = 0;
+			site.fightdices = [];
+			/* state_of_fight
+			   0 - to roll 
+			   1 - rolled 
+			   2 - approved
+			 */
+			
+			site.state_of_fight = 0;
 			site.searches = [
-			    {score: 0, boxes: ["","","","","",""] , searchid: 0 , insearch: 0,dices:[] },
-			    {score: 0, boxes: ["","","","","",""] , searchid: 1 , insearch: 0,dices:[] },
-			    {score: 0, boxes: ["","","","","",""] , searchid: 2 , insearch: 0,dices:[] },
-			    {score: 0, boxes: ["","","","","",""] , searchid: 3 , insearch: 0,dices:[] },
-			    {score: 0, boxes: ["","","","","",""] , searchid: 4 , insearch: 0,dices:[] },
-			    {score: 0, boxes: ["","","","","",""] , searchid: 5 , insearch: 0,dices:[] }
+			    /* insearch
+			       0 - NOT IN 
+                               1 - FIRST DICE TO SCORE
+                               2 - SECOND DICE TO SCORE 
+			       3 - RESOLVE SCORE 
+                             */
+			    {score: null, boxes: ["","","","","",""] , searchid: 0 , insearch: 0,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 1 , insearch: 0,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 2 , insearch: 0,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 3 , insearch: 0,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 4 , insearch: 0,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 5 , insearch: 0,dices:[] }
 			],
 			arr.push(site);
 		    }
@@ -36,14 +91,26 @@
 		}
  };
  const initalState = {
-     sites: game.initialState(),
-     active_site: 0
+     sites: game.initialSites(),
+     active_site: 0,
+     player: { name: 'Cobranet',
+	       components: [],
+	       constructs: [],
+	       health: 6,
+	       imagename: "cobranet.png"
+     },
+     constructs: [0,0,0,0,0,0],
+     components: [0,0,0,0,0,0],
+     toast: ""
  }
  const reducer = function(state,action) {
      if(!state){
 	 return initalState;
      }
      switch(action.type){
+	 case "CLOSE_TOAST":
+	     var obj = Object.assign({},state,{toast: ""});
+	     return obj;
 	 case "SELECT_SITE":
 	     const sites = state.sites.slice(0);
 	     const active_site= action.selectedSite;
@@ -60,6 +127,23 @@
 	     new_site = siteReducer(state.sites[active],action);
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
 	     var obj = Object.assign({},state,{sites: new_sites});
+	     return obj;
+	 case "RESOLVE" :
+	     var new_components = state.components.slice(0);
+	     var new_constructs = state.constructs;
+	     var active = state.active_site;
+	     var new_toast = "";
+	     new_site = siteReducer(state.sites[active],action);
+	     if ( new_site.last_found == 1 ) {
+		 new_components = reduxUtils.replaceItem(state.components,active,state.components[active] + 1 );
+		 new_toast = "You found " + new_site.component + "!";
+	     }
+	     if ( new_site.last_found == 2 ) {
+		 new_constructs: reduxUtils.replaceItem(state.constructs,active, 1 );
+		 new_toast = "You found " + new_site.construct + "!";
+	     }
+	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     var obj = Object.assign({},state,{sites: new_sites,components: new_components,constructs: new_constructs,toast: new_toast });
 	     return obj;
 	 case "SEARCH":
 	     new_site = siteReducer(state.sites[active],action);

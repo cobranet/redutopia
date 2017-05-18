@@ -14,7 +14,8 @@
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
 <link rel="import" href="co-dice/co-dice.html">
-<dom-module id="u2-box">
+<link rel="import" href="u2-monster.html">
+<dom-module id="u2-fight">
     <template>
 	<style include="shared-styles iron-flex iron-flex-alignment">
 	 :host {
@@ -42,25 +43,14 @@
 	</style>
 	<div class="box">
 	    <div class="layout horizontal">
-		<table>
-		    <tr>
-			<td data-cell="0"  on-tap="_tapCell">[[boxes.0]]</td>
-			<td data-cell="1"  on-tap="_tapCell">[[boxes.1]]</td>
-			<td data-cell="2"  on-tap="_tapCell">[[boxes.2]]</td>
-		    </tr>
-		    <tr>
-			<td data-cell="3"  on-tap="_tapCell">[[boxes.3]]</td>
-			<td data-cell="4"  on-tap="_tapCell">[[boxes.4]]</td>
-			<td data-cell="5"  on-tap="_tapCell">[[boxes.5]]</td>
-		    </tr>
-		</table>
+		<u2-monster  name="[[monster.name]]" atk="[[monster.atk]]" hit="[[monster.hit]]" image="[[monster.image]]"></u2-monster>
 		<div>
 		    <paper-button hidden$="{{_computeHiddenButtonRoll(insearch,active)}}" raised on-tap="_roll">Roll</paper-button>
 		</div>
-		<div hidden$="{{_computeHiddenDice(insearch,active)}}" >
+		<div hidden$="{{_computeHiddenDice(state_of_fight)}}" >
 		    <div class="layout horizontal">
-		    <co-dice dicecolor="red" dotcolor="white" dicesize="[[_calcDiceSize1(insearch)]]" value="[[dices.0]]"  ></co-dice>
-		    <co-dice dicecolor="blue" dotcolor="white" dicesize="[[_calcDiceSize2(insearch)]]" value="[[dices.1]]"  ></co-dice>
+			<co-dice dicecolor="red" dotcolor="white" dicesize="[[_calcDiceSize1(insearch)]]" value="[[dices.0]]"  ></co-dice>
+			<co-dice dicecolor="blue" dotcolor="white" dicesize="[[_calcDiceSize2(insearch)]]" value="[[dices.1]]"  ></co-dice>
 		    </div>
 		</div>
 		<div   class="layout vertical" >
@@ -75,13 +65,13 @@
 
     <script>
      Polymer({
-	 is: 'u2-box',
+	 is: 'u2-fight',
 	 behaviors: [ReduxBehavior],
 	 actions: {
-	     roll: function(search) {
+	     roll: function(dices) {
 		 return {
-		     type: "ROLL",
-		     search: search
+		     type: "ROLL_FIGHT",
+		     dices: dices
 		 }
 	     },
 	     resolve: function(search,score) {
@@ -89,18 +79,16 @@
 		     type: "RESOLVE",
 		     search: search,
 		     score: score };
-	     },
-	     tapCell: function(cell,search,dicevalue){
-		 return {
-		     type: "TAP_CELL",
-		     cell: cell,
-		     search: search,
-		     dicevalue: dicevalue }
 	     }
 	 },
 	 properties: {
-	     active: {
-		 type: Number
+	     monster: {
+		 type: Object,
+		 statePath: function(state) { return state.sites[state.active_site].monsters[0] }
+	     },
+	     state_of_fight: {
+		 type: Number,
+		 statePath: function(state) { return state.sites[state.active_site].state_of_fight; }
 	     },
 	     insearch: {
 		 type: Number
@@ -115,19 +103,14 @@
 		 type: Array
 	     },
 	     dices: {
-		 type: Array
+		 type: Array,
+		 statePath: function(state) { return state.sites[state.active_site].fightdices; }
 	     }
 	     
 	 },
-	 _computeHiddenScore: function(score){
-	     if(score == null) return true;
+	 _computeHiddenDice: function(state_of_fight){
+	     if (state_of_fight == 0 ) return true;
 	     return false;
-	 },
-	 _computeHiddenDice: function(insearch,active){
-	     if (active == 0 ) return true;
-	     if ( insearch > 2 ) return true;
-	     if( insearch != 0 ) return false;
-	     return true;
 	 },
 
 	 _computeHiddenButtonRoll: function(insearch,active){
@@ -150,16 +133,16 @@
 	     return false;
 	 },
 	 _roll: function(e){
-	     this.dispatch("roll",this.search);
+	     this.dispatch("roll",this.dices);
 	 },
 	 _resolve: function(){
 	     this.dispatch("resolve",this.search,this.score);
 	 },
 	 _tapCell: function(e){
-		 this.dispatch("tapCell",
-			       e.target.getAttribute("data-cell"),
-			       this.search,
-		               this.dices[this.insearch-1]);
+	     this.dispatch("tapCell",
+			   e.target.getAttribute("data-cell"),
+			   this.search,
+		           this.dices[this.insearch-1]);
 	 },
 	 _calcDiceSize1: function(){
 	     if (this.insearch == 1 ) {

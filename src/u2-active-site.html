@@ -13,6 +13,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
 <link rel="import" href="u2-searches.html">
+<link rel="import" href="u2-fight.html">
 <dom-module id="u2-active-site">
   <template>
       <style include="shared-styles iron-flex iron-flex-alignment">
@@ -20,18 +21,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         display: flex;
         padding: 10px;
       }
-     .active {
+       .active {
 	 color: red;
-     }
-     .imgs {
-	 width: 300px;
-	 heigth: 500px;
-     }
+       }
+       .imgs {
+	   width: 300px;
+	   heigth: 300px;
+       }
+       
+       .imgsSmall {
+	   width: 30px;
+	   heigth: 30px;
+       }
+       
       </style>
       <div class="active_site" >
 	  <div class="layout horizontal">
 	      <div class="layout vertical">
-		  <img class="imgs" src="/images/sites/{{image}}">
+		  <div class="layout horizontal">
+		      <div>
+			  <img class$="{{_imgs(infight)}}" src="/images/sites/{{image}}">
+		      </div>
+		      <div hidden$="{{_monsterHidden(infight)}}">
+			  <u2-fight></u2-fight>
+		      </div>
+		  </div>
 		  <div class="name">[[name]]</div>
 	      </div>
 	      <div>
@@ -60,7 +74,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		statePath: function(state) { return state.sites[state.active_site].imagename; }
 
 	    },
-	    searches : {
+	    infight: {
+		type: String,
+		statePath: function(state) { return state.sites[state.active_site].infight; }
+	    },
+	    searches: {
 		type: Array,
 		statePath: function(state) { return state.sites[state.active_site].searches; }
 	    },
@@ -69,6 +87,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		statePath: function(state) { return state.sites[state.active_site].name; }
 	    }
 	    
+	},
+	_monsterHidden: function(infight){
+	    if (infight == 0 ) { return true; }
+	    return false;
+	},
+	_imgs: function(infight){
+	    if ( infight == 0 ){
+		return "imgs";
+	    } else {
+		return "imgsSmall";
+	    }
 	}
     });
   </script>

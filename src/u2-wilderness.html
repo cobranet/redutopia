@@ -10,6 +10,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
@@ -20,14 +22,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <template>
       <style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
       :host {
-        display: block;
+        display: flex;
 
         padding: 10px;
-      }
+       }
+       #modal {
+	   width: 300px;
+       }
       </style>
-
-    <div class="card layout horizontal wrap">
+      <paper-dialog id="modal">
+	  <p>Information</p>
+	  <p>[[toast]]</p>
+	  <div class="buttons">
+	      <paper-button dialog-confirm autofocus on-tap="_closeModal">OK</paper-button>
+	  </div>
+      </paper-dialog>
+      <div class="card layout horizontal wrap">
+	  
 	<div class="active_site flex ">
+
 	    <u2-active-site></u2-active-site>
 	</div>
 	<div class="sites flex ">
@@ -37,16 +50,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		</template>
 	    </div>
 	</div>
+
   </template>
 
   <script>
     Polymer({
 	is: 'u2-wilderness',
 	behaviors: [ReduxBehavior],
+	actions: {
+	    closeToast: function(){
+		return {
+		    type: "CLOSE_TOAST"
+		}
+	    }
+	},
 	properties: {
 	    sites: {
 		type: Array,
 		statePath: "sites"
+	    },
+	    toast: {
+		type: String,
+		statePath: function(state){ if (state.toast != "" ) { this.$.modal.open(); return state.toast; }}
 	    },
 	    active_site: {
 		type: Number,
@@ -60,6 +85,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	},
 	_active: function(){
 	    return this.active_site;
+	},
+	_closeModal: function(){
+	    this.dispatch("closeToast");
+	    this.$.modal.close();
 	},
 	computeSitesCount: function(sites){
 	    return sites.length;

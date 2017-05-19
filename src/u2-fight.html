@@ -43,21 +43,23 @@
 	</style>
 	<div class="box">
 	    <div class="layout horizontal">
-		<u2-monster  name="[[monster.name]]" atk="[[monster.atk]]" hit="[[monster.hit]]" image="[[monster.image]]"></u2-monster>
-		<div>
-		    <paper-button hidden$="{{_computeHiddenButtonRoll(insearch,active)}}" raised on-tap="_roll">Roll</paper-button>
+		<div> 
+		    <u2-monster  name="[[monster.name]]" atk="[[monster.atk]]" hit="[[monster.hit]]" image="[[monster.image]]"></u2-monster>
 		</div>
-		<div hidden$="{{_computeHiddenDice(state_of_fight)}}" >
-		    <div class="layout horizontal">
-			<co-dice dicecolor="red" dotcolor="white" dicesize="[[_calcDiceSize1(insearch)]]" value="[[dices.0]]"  ></co-dice>
-			<co-dice dicecolor="blue" dotcolor="white" dicesize="[[_calcDiceSize2(insearch)]]" value="[[dices.1]]"  ></co-dice>
+		<div class="layout vertical">
+		    <div>
+			<paper-button hidden$="{{_computeHiddenButtonRoll(state_of_fight)}}" raised on-tap="_roll">Roll</paper-button>
+			<paper-button hidden$="{{_computeHiddenButtonOK(state_of_fight)}}" raised on-tap="_finish">OK</paper-button>
 		    </div>
-		</div>
-		<div   class="layout vertical" >
-		    <div class="score" hidden$="{{_computeHiddenScore(score)}}" >
-			Score : [[score]]
+		    <div hidden$="{{_computeHiddenDice(state_of_fight)}}" >
+			<div class="layout horizontal">
+			    <co-dice dicecolor="red" dotcolor="white" dicesize="30" value="[[dices.0]]"  ></co-dice>
+			    <co-dice dicecolor="blue" dotcolor="white" dicesize="30" value="[[dices.1]]"  ></co-dice>
+			</div>
 		    </div>
-		    <paper-button hidden$="{{_computeHiddenButtonResolve(insearch,active)}}" raised on-tap="_resolve">Resolve</paper-button>	
+		    <div>
+			[[message]]
+		    </div>
 		</div>
 	    </div>
 	</div>
@@ -74,22 +76,26 @@
 		     dices: dices
 		 }
 	     },
-	     resolve: function(search,score) {
+	     finish: function(){
 		 return {
-		     type: "RESOLVE",
-		     search: search,
-		     score: score };
+		     type: "END_FIGHT"
+		 }
 	     }
 	 },
 	 properties: {
 	     monster: {
 		 type: Object,
-		 statePath: function(state) { return state.sites[state.active_site].monsters[0] }
+		 statePath: function(state) { return state.sites[state.active_site].monsters[state.sites[state.active_site].infight-1] }
 	     },
 	     state_of_fight: {
 		 type: Number,
 		 statePath: function(state) { return state.sites[state.active_site].state_of_fight; }
 	     },
+	     message: {
+		 type: String,
+		 statePath: function(state) { return state.sites[state.active_site].fight_message; }
+	     },
+	     
 	     insearch: {
 		 type: Number
 	     },
@@ -113,15 +119,13 @@
 	     return false;
 	 },
 
-	 _computeHiddenButtonRoll: function(insearch,active){
-	     if ( active == 0 ) {
-		 return true;
-	     }
-	     if (insearch != 0 ) {
-		 return true;
-	     } else {
-		 return false;
-	     }
+	 _computeHiddenButtonRoll: function(state_of_fight){
+	     if( state_of_fight == 2) { return true; }
+	     return false;
+	 },
+	 _computeHiddenButtonOK: function(state_of_fight){
+	     if (state_of_fight == 2 ) { return false; }
+	     return true;
 	 },
 	 _computeHiddenButtonResolve: function(insearch,active){
 	     if ( active == 0 ) {
@@ -151,6 +155,10 @@
 		 return 25;
 	     }
 	 },
+	 _finish: function(){
+	     this.dispatch("finish");
+	 },
+	 
 	 _calcDiceSize2: function(){
 	     if (this.insearch == 2 ) {
 		 return 35;

@@ -46,6 +46,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </style>
     <div class="site {{selected}}" >
 	<div class="layout vertical">
+	    <div class="tt" >
+		<template is="dom-repeat" items="{{timeline}}">
+		    <svg class="timeline"  height="15" width="15">
+			<circle cx="10" cy="10" r="5" fill$="{{_circleCol(item)}}"  />
+		    </svg>
+		</template>
+	    </div>
 	    <div>
 		<img class="imgs" src="/images/sites/{{image}}" on-tap="_selectSite" >
 		<div class="construct">
@@ -61,9 +68,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		</div>
 		<div class="name">[[name]]</div>
 	    </div>
-
 	</div>
-
     </div>
   </template>
 
@@ -82,6 +87,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	properties: {
 	    placeid: {
 		type: Number
+	    },
+	    timeline: {
+		type: Array,
+		statePath: function(state) { return state.sites[this.placeid].timeline; }
 	    },
 	    component: {
 		type: String,
@@ -115,6 +124,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 		statePath: function(state) { return state.sites[this.placeid].name; }
 	    }
 	    
+	},
+	_circleCol: function(item){
+	    if(item == 0 ) {
+		return "green";
+	    } else {
+		return "red";
+	    }
 	},
 	_selectSite: function(){  
 	    this.dispatch("select",this.placeid);

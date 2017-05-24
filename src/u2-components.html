@@ -10,41 +10,47 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
-<link rel="import" href="u2-box.html">
-<dom-module id="u2-searches">
+<dom-module id="u2-components">
     <template>
-	<style include="shared-styles iron-flex iron-flex-alignment">
+	<style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
 	 :host {
              display: flex;
+
+             padding: 10px;
+	 }
+	 .components {
+	     font-size: 10px;
+	     color: black;
 	 }
 	</style>
-	<div class="layout vertical">
-	    <template is="dom-repeat"  items="[[searches]]">
-		<u2-box active="[[_computeActive(active,index)]]"  dices="[[item.dices]]" search="[[index]]" boxes="[[item.boxes]]" insearch="[[item.insearch]]" score="[[item.score]]" ></u2-box>
+	<div class="components layout vertical center">
+	    <template is="dom-repeat" items="[[names]]">
+		[[item]] : [[_compCount(index,components)]]
 	    </template>
 	</div>
     </template>
 
     <script>
      Polymer({
-	 is: 'u2-searches',
+	 is: 'u2-components',
 	 behaviors: [ReduxBehavior],
-	 properties: {
-	     active: {
-		 type: Number
+	 properties:{
+	     names: { 
+		 type: Array,
+		 statePath: "components_names"
 	     },
-	     searches: {
-		 type: Array
+	     components: {
+		 type: Array,
+		 statePath: "components"
 	     }
-	     
 	 },
-	 _computeActive: function(active,index){
-	     if (index == active){
-		 return 1;
-	     }
-	     return 0;
+	 _compCount: function(index,components){
+	     return components[index];
 	 }
      });
     </script>

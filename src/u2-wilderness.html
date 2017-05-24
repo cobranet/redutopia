@@ -17,6 +17,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="redux-store.html">
 <link rel="import" href="u2-site.html">
 <link rel="import" href="u2-active-site.html">
+<link rel="import" href="u2-user.html">
+<link rel="import" href="u2-timetrack.html">
+<link rel="import" href="u2-components.html">
+<link rel="import" href="u2-state.html">
 
 <dom-module id="u2-wilderness">
   <template>
@@ -30,6 +34,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	   width: 300px;
        }
       </style>
+      <paper-dialog id="statedlg">
+	  <paper-dialog-scrollable>
+	      <u2-state></u2-state>
+	  </paper-dialog-scrollable>
+	  <div class="buttons">
+	      <paper-button dialog-confirm autofocus on-tap="_closeStateDlg">OK</paper-button>
+	  </div>
+      </paper-dialog>
       <paper-dialog id="modal">
 	  <p>Information</p>
 	  <p>[[toast]]</p>
@@ -37,20 +49,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	      <paper-button dialog-confirm autofocus on-tap="_closeModal">OK</paper-button>
 	  </div>
       </paper-dialog>
-      <div class="card layout horizontal wrap">
-	  
-	<div class="active_site flex ">
-
-	    <u2-active-site></u2-active-site>
-	</div>
-	<div class="sites flex ">
-	    <div class="layout horizontal wrap">
-		<template is="dom-repeat" items="[[sites]]">
-		    <u2-site placeid="[[index]]" ></u2-site>
-		</template>
-	    </div>
-	</div>
-
+      <div class=" card layout vertical">
+	  <div class="layout horizontal wrap">
+	      <u2-timetrack></u2-timetrack>
+	      <u2-components></u2-components>
+	      <paper-button dialog-confirm autofocus on-tap="_openStateDlg">State</paper-button>
+	  </div>
+	  <div class="layout horizontal wrap">
+	      <div class="active_site flex ">
+		  <u2-active-site></u2-active-site>
+	      </div>
+	      <div class="sites flex ">
+		  <div class="layout horizontal wrap">
+		      <template is="dom-repeat" items="[[sites]]">
+			  <u2-site placeid="[[index]]" ></u2-site>
+		      </template>
+		  </div>
+	      </div>
+	  </div>
   </template>
 
   <script>
@@ -92,6 +108,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 	},
 	computeSitesCount: function(sites){
 	    return sites.length;
+	},
+	_closeStateDlg: function(){
+	    this.$.statedlg.close();
+	},
+	_openStateDlg: function(){
+	    this.$.statedlg.open();
 	}
     });
   </script>

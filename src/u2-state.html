@@ -10,41 +10,40 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="redux-store.html">
-<link rel="import" href="u2-box.html">
-<dom-module id="u2-searches">
+<dom-module id="u2-state">
     <template>
-	<style include="shared-styles iron-flex iron-flex-alignment">
+	<style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
 	 :host {
              display: flex;
+             padding: 10px;
+	 }
+	 .state {
+	     padding: 10px;
+	     font-size: 90%;
 	 }
 	</style>
-	<div class="layout vertical">
-	    <template is="dom-repeat"  items="[[searches]]">
-		<u2-box active="[[_computeActive(active,index)]]"  dices="[[item.dices]]" search="[[index]]" boxes="[[item.boxes]]" insearch="[[item.insearch]]" score="[[item.score]]" ></u2-box>
-	    </template>
+	<div class="state layout vertical center">
+	    [[stateJSON]]
 	</div>
     </template>
 
     <script>
      Polymer({
-	 is: 'u2-searches',
+	 is: 'u2-state',
 	 behaviors: [ReduxBehavior],
-	 properties: {
-	     active: {
-		 type: Number
-	     },
-	     searches: {
-		 type: Array
+	 properties:{
+	     stateJSON: {
+		 type: String,
+		 statePath: function(state) {
+		     var s = Object.assign ( {},{ lock_site: state.lock_site, active_site: state.active_site , main_site: state.sites[state.active_site] });
+		     return JSON.stringify(s,null,'\t');
+		 }
 	     }
-	     
-	 },
-	 _computeActive: function(active,index){
-	     if (index == active){
-		 return 1;
-	     }
-	     return 0;
 	 }
      });
     </script>

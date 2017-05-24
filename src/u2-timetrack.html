@@ -1,0 +1,105 @@
+<!--
+     @license
+     Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+     The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+     The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+     Code distributed by Google as part of the polymer project is also
+     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+   -->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="redux-store.html">
+<dom-module id="u2-timetrack">
+    <template>
+	<style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
+	 :host {
+             display: flex;
+
+             padding: 10px;
+	 }
+	 img {
+	     width: 60px;
+	 }
+	 .user {
+	     width: 100%;
+	 }
+	 .letter {
+	     font-size: 70%;
+	 }
+	 .expirebox {
+	     fill: "red"
+	 }
+	 .notexpirebox {
+	     background-color: white;
+	 }
+	 
+	</style>
+	<div class="timetrack layout vertical center">
+	    <div class="layout horizontal">
+		<template is="dom-repeat" items="{{track}}">
+		    <svg class$="{{_class(track,index)}}" height="20" width="20">
+			<rect class$="{{_calcclassBox(time,index)}}" x="0" y="0" width="15" height="15"  stroke="black" stroke-width="1" fill$="{{_expire(time,index)}}" />
+			<text class$="{{_calcclass(time,index)}}" hidden$="{{_eventField(track,index)}}"  x="5" y="12" fill="green">E</text>
+		    </svg>
+		</template>
+	    </div>
+	</div>
+    </template>
+
+    <script>
+     Polymer({
+	 is: 'u2-timetrack',
+	 behaviors: [ReduxBehavior],
+	 properties:{
+	     track: {
+		 type: Array,
+		 statePath: 'timetrack'
+	     },
+	     time: {
+		 type: Number,
+		 statePath: 'time'
+	     },
+	     test: {
+		 type: String,
+		 value: "TEST"
+	     }
+	 },
+	 _calcclass: function(time,index){
+	     if (time > index){
+		 return "expire letter";
+	     } else {
+		 return "letter";
+	     }
+	 },
+	 _calcclassBox: function(time,index){
+	     if (time > index){
+		 return "expirebox";
+	     } else {
+		 return "notexpirebox";
+	     }
+	 },
+	 _expire: function(time,index){
+	     if (time > index){
+		 return "gray";
+	     } else {
+		 return "white";
+	     }
+	 },
+	 _eventField: function(track,index){
+	     if (track[index]== 1){
+		 return false;
+	     }
+	     return true;
+	 },
+	 _class(track,index){
+	     return "event";
+	 }
+     });
+    </script>
+</dom-module>

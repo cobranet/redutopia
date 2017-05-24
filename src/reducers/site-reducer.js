@@ -6,35 +6,62 @@ var siteReducer = function(state,action){
 	var sstate = {};
 	sstate.fight_message = "";
 	sstate.infight = 0;
+	sstate.lock_site = null;
+	
+	
+	var search_old = Object.assign({},state.searches[state.active_search]);
+	search_old.insearch = 0;
+	var new_searches = reduxUtils.replaceItem(state.searches,state.active_search, search_old );
+	console.log(new_searches);
+	sstate.active_search = state.active_search + 1;
+	if (sstate.active_search > 5 ) {
+	    sstate.active_search = null;
+	} else {
+	    var search_new = Object.assign({},state.searches[sstate.active_search]);
+	    new_searches = reduxUtils.replaceItem(new_searches,sstate.active_search, search_new );
+	}
+
+	sstate.searches = new_searches;
+	console.log(sstate.searches);
 	sstate.fightdices = [];
 	sstate.state_of_fight= 0;
-	return Object.assign({},state,sstate);
+	var new_state = Object.assign({},state,sstate);
+	console.log(new_state);
+	return new_state;
     case "TAP_CELL" :
-	var new_searches = reduxUtils.replaceItem(state.searches,action.search, searchReducer(state.searches[action.search],action) );
+	new_searches = reduxUtils.replaceItem(state.searches,action.search, searchReducer(state.searches[action.search],action) );
 	return Object.assign({},state,{searches: new_searches,last_found: 0});
     case "ROLL":
 	new_searches = reduxUtils.replaceItem(state.searches,action.search,searchReducer(state.searches[action.search],action));
 	return Object.assign({},state,{searches: new_searches,last_found: 0});
     case "ROLL_FIGHT":
-	var new_dices = [Math.floor(Math.random() * 6) + 1, Math.floor(Math.random() * 6) + 1];
-	var killed = 0;
-	var damage = 0;
+	var ssite = {};
+	ssite.fightdices = [reduxUtils.rollDice(),reduxUtils.rollDice()];
+	ssite.killed = 0;
+	ssite.damage = 0;
 	var monster = state.monsters[state.infight-1];
-	new_dices.forEach(function(dice){
+	ssite.fightdices.forEach(function(dice){
 	    if  (monster.hit.includes(dice) ) {
-		killed = 1;
+		ssite.killed = 1;
+		var dropdice = reduxUtils.rollDice();
+		alert(dropdice);
+		if (dropdice <= state.infight ) {
+		    alert("Monster Drop");
+		}
+		
 	    }
 	    if ( monster.atk.includes(dice)){
-		damage = damage + 1;
+		ssite.damage = ssite.damage + 1;
 	    }
 	});
-	var new_state_of_fight = state.state_of_fight;
-	var new_message = "You suffer " + damage + " damage. ";
-	if(killed == 1) {
-	    new_message = new_message + "You killed "+ monster.name ;
-	    new_state_of_fight = 2;
+	ssite.state_of_fight = 1;
+	
+	ssite.fight_message = "You suffer " + ssite.damage + " damage. ";
+	if(ssite.killed == 1) {
+	    ssite.fight_message = ssite.fight_message + "You killed "+ monster.name ;
+	    ssite.state_of_fight = 2;
 	}
-	return Object.assign({},state,{fightdices: new_dices,state_of_fight: new_state_of_fight,fight_message: new_message});
+	return Object.assign({},state,ssite);
 
 	
     case "RESOLVE":

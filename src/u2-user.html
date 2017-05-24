@@ -1,0 +1,73 @@
+<!--
+     @license
+     Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+     This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+     The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+     The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+     Code distributed by Google as part of the polymer project is also
+     subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+   -->
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="redux-store.html">
+<dom-module id="u2-user">
+    <template>
+	<style include="shared-styles iron-flex iron-flex-alignment iron-flex-layout">
+	 :host {
+             display: flex;
+
+             padding: 10px;
+	 }
+	 img {
+	     width: 60px;
+	 }
+	 .user {
+	     width: 100%;
+	 }
+	</style>
+	<div class="card user   layout vertical center">
+	    <div>[[user.name]]</div>
+	    <div>[[user.image]]</div>
+	    <img src="images/users/[[user.imagename]]"></img>
+	    <div class="layout horizontal">
+		<template is="dom-repeat" items="{{circles}}">
+		    <svg hidden$="{{_score(user.health,index)}}" height="15" width="15">
+			<circle cx="10" cy="10" r="5" stroke="red" stroke-width="1" fill="red" />
+
+		    </svg>
+		</template>
+	    </div>
+	</div>
+    </template>
+
+    <script>
+     Polymer({
+	 is: 'u2-user',
+	 behaviors: [ReduxBehavior],
+	 properties:{
+	     circles: {
+		 type: Array,
+		 value: [0,1,2,3,4,5]
+	     },
+	     time: {
+		 type: Number,
+		 statePath: "time"
+	     },
+	     user: {
+		 type: Object,
+		 statePath: "user"
+	     }
+	 },
+	 _score(health,index){
+	     if ( index < health ) { return false; };
+	     return true;
+		 
+	 }
+     });
+    </script>
+</dom-module>

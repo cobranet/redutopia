@@ -4,12 +4,19 @@
 <script src="reducers/site-reducer.js"></script>
 <script src="utils.js"></script>
 <script>
+
  
  const game = { names: ["Halebeard Peak" , "The Great Wilds", "Root Stranged Marshes", "Glassrock Canyon", "Ruined City", "The Fiery Maw"  ],
 		images: [ "castle.png", "desert.png", "forest.png" , "island.png" , "swamp.png", "pole.png" ],
 		constructs: [ "Seal of Balance", "Hermetic Mirror",  "Void Gate" , "Golden Chassis" , "Scrying Lens", "Crystal Battery"],
 		components: ["Silver", "Quartz", "Gum", "Silica", "Wax", "Lead" ],
 		treasures: ["Ice Plate", "Bracelet of Ios", "Shimmering Moonlice" , "Scale of Infinity Wurm", "The Ancient Record", "The Molten Shard" ],
+		timelines: [ [1,1,0,1,0,0],
+			     [1,0,0,1,0,0],
+			     [1,0,1,0,1,0],
+			     [1,0,1,0,1,0],
+			     [1,0,0,1,0,0],
+			     [1,1,0,1,0,0]],
 		monsters: [ [ { name: "Ice Bear", atk: [1],hit: [5,6],image: "bear.png" },
 			      { name: "Roving Bandits", atk: [1],hit: [6], image: "bandits.png" },
 			      { name: "Blod Wolves" , atk: [1,2], hit: [6], image: "wolves.png" },
@@ -18,7 +25,7 @@
 			    [ { name: "Rouge Theif", atk: [1,2],hit: [5,6],image: "thief.png" },
 			      { name: "Blanket of Crows", atk: [1],hit: [6], image: "crows.png" },
 			      { name: "Hornback Bison" , atk: [1], hit: [6], image: "bison.png" },
-			      { name: "Grassyback Troll" , atk: [1,2,3], hit: [5-6], image: "troll.png" },
+			      { name: "Grassyback Troll" , atk: [1,2,3], hit: [5,6], image: "troll.png" },
 			      { name: "Thunder King" , atk: [1,2,3,4], hit: [6], image: "thunder.png" }],
 			    [ { name: "Feisty Gremlin", atk: [1],hit: [5,6],image: "gremlin.png" },
 			      { name: "Glasswing Drake", atk: [1],hit: [6], image: "drake.png" },
@@ -41,7 +48,7 @@
 			      { name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
 			      { name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
 			    [ { name: "Minor Imp", atk: [1],hit: [5,6],image: "imp.png" },
-			      { name: "Renegade Warlock", atk: [1-2],hit: [5-6], image: "warlock.png" },
+			      { name: "Renegade Warlock", atk: [1,2],hit: [5,6], image: "warlock.png" },
 			      { name: "Gienat Flame Lizard" , atk: [1,2,3], hit: [5,6], image: "lizard.png" },
 			      { name: "Spark Elemental" , atk: [1,2,3], hit: [6], image: "elemental.png" },
 			      { name: "Volcano Spirit" , atk: [1,2,3,4], hit: [6], image: "spirit.png" }]
@@ -53,6 +60,7 @@
 		    for (i=0;i<6;i++) {
 			site = {};
 			site.name = game.names[i];
+			site.timeline = game.timelines[i];
 			site.foundconstruct = 0;
 			site.last_found = 0;
 			site.construct = game.constructs[i];
@@ -81,22 +89,28 @@
                                2 - SECOND DICE TO SCORE 
 			       3 - RESOLVE SCORE 
                              */
-			    {score: null, boxes: ["","","","","",""] , searchid: 0 , insearch: 0,dices:[] },
-			    {score: null, boxes: ["","","","","",""] , searchid: 1 , insearch: 0,dices:[] },
-			    {score: null, boxes: ["","","","","",""] , searchid: 2 , insearch: 0,dices:[] },
-			    {score: null, boxes: ["","","","","",""] , searchid: 3 , insearch: 0,dices:[] },
-			    {score: null, boxes: ["","","","","",""] , searchid: 4 , insearch: 0,dices:[] },
-			    {score: null, boxes: ["","","","","",""] , searchid: 5 , insearch: 0,dices:[] }
+			    {score: null, boxes: ["","","","","",""] , searchid: 0 , insearch:0 ,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 1 , insearch:0 ,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 2 , insearch:0 ,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 3 , insearch:0 ,dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 4 , insearch:0, dices:[] },
+			    {score: null, boxes: ["","","","","",""] , searchid: 5 , insearch:0, dices:[] }
 			],
 			arr.push(site);
 		    }
 		    return arr;
 		}
  };
+ const pState = function(state){
+     console.log("##########################");
+     console.log( state);
+     console.log("##########################");
+ }
  const initalState = {
      sites: game.initialSites(),
      active_site: 0,
-     player: { name: 'Cobranet',
+     components_names: game.components,
+     user: {   name: 'Cobranet',
 	       components: [],
 	       constructs: [],
 	       health: 6,
@@ -104,24 +118,36 @@
      },
      constructs: [0,0,0,0,0,0],
      components: [0,0,0,0,0,0],
-     toast: ""
+     toast: "",
+     timetrack: [0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0,1,0,0],
+     time: 0,
+     lock_site: null
  }
  const reducer = function(state,action) {
      if(!state){
 	 return initalState;
      }
+     console.log(action);
      switch(action.type){
 	 case "END_FIGHT":
 	     var active = state.active_site;
 	     new_site = siteReducer(state.sites[active],action);
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
-	     var obj = Object.assign({},state,{sites: new_sites});
+	     var obj = Object.assign({},state,{sites: new_sites,lock_site: null});
+	     
 	     return obj;	     
 	 case "ROLL_FIGHT":
 	     var active = state.active_site;
 	     new_site = siteReducer(state.sites[active],action);
+	     var user = state.user;
+	     if (new_site.damage ) {
+		 user  = Object.assign({},state.user, {health:state.user.health - new_site.damage });
+		 console.log(user);
+		 new_site.damage = null;
+		 new_site.killed = null;
+	     }
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
-	     var obj = Object.assign({},state,{sites: new_sites});
+	     var obj = Object.assign({},state,{sites: new_sites,user: user});
 	     return obj;	     
 	 case "CLOSE_TOAST":
 	     var obj = Object.assign({},state,{toast: ""});
@@ -138,10 +164,21 @@
 	     var obj = Object.assign({},state,{sites: new_sites});
 	     return obj;
 	 case "ROLL" :
+	     pState(state);
 	     var active = state.active_site;
+	     var new_lock = state.lock_site;
+	     var new_time = state.time;
+	     if ( state.lock_site == null ) {
+		 new_lock = state.active_site;
+		 if ( state.sites[active].timeline[action.search] == 1 ) { 
+		     new_time = new_time + 1;
+		 }
+		 
+	     }
+
 	     new_site = siteReducer(state.sites[active],action);
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
-	     var obj = Object.assign({},state,{sites: new_sites});
+	     var obj = Object.assign({},state,{sites: new_sites,lock_site: new_lock,time: new_time } );
 	     return obj;
 	 case "RESOLVE" :
 	     var new_components = state.components.slice(0);
@@ -159,6 +196,7 @@
 	     }
 	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
 	     var obj = Object.assign({},state,{sites: new_sites,components: new_components,constructs: new_constructs,toast: new_toast });
+	     pState(obj);
 	     return obj;
 	 case "SEARCH":
 	     new_site = siteReducer(state.sites[active],action);

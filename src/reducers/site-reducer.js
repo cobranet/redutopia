@@ -43,11 +43,6 @@ var siteReducer = function(state,action){
 	ssite.fightdices.forEach(function(dice){
 	    if  (monster.hit.includes(dice) ) {
 		ssite.killed = 1;
-		var dropdice = reduxUtils.rollDice();
-		alert(dropdice);
-		if (dropdice <= state.infight ) {
-		    alert("Monster Drop");
-		}
 		
 	    }
 	    if ( monster.atk.includes(dice)){

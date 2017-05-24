@@ -130,10 +130,20 @@
      console.log(action);
      switch(action.type){
 	 case "END_FIGHT":
+	     // test for kill *//
+	     var to_rep = {};
 	     var active = state.active_site;
-	     new_site = siteReducer(state.sites[active],action);
-	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
-	     var obj = Object.assign({},state,{sites: new_sites,lock_site: null});
+	     var dropdice = reduxUtils.rollDice();
+	     if (dropdice <= state.sites[active].infight ) {
+		 alert("Monster Drop Component " + state.components_names[active] );
+		 to_rep.new_components = reduxUtils.replaceItem(state.components,active,state.components[active] + 1 );
+		 to_rep.new_toast = "Monster drop " + state.sites[active].component ;
+	     }
+
+	     to_rep.new_site = siteReducer(state.sites[active],action);
+	     to_rep.new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     //	     var obj = Object.assign({},state,{sites: new_sites,lock_site: null,components: new_components });
+	     var obj = Object.assign({},state,to_rep);
 	     
 	     return obj;	     
 	 case "ROLL_FIGHT":
@@ -164,7 +174,6 @@
 	     var obj = Object.assign({},state,{sites: new_sites});
 	     return obj;
 	 case "ROLL" :
-	     pState(state);
 	     var active = state.active_site;
 	     var new_lock = state.lock_site;
 	     var new_time = state.time;

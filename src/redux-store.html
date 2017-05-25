@@ -4,7 +4,6 @@
 <script src="reducers/site-reducer.js"></script>
 <script src="utils.js"></script>
 <script>
-
  
  const game = { names: ["Halebeard Peak" , "The Great Wilds", "Root Stranged Marshes", "Glassrock Canyon", "Ruined City", "The Fiery Maw"  ],
 		images: [ "castle.png", "desert.png", "forest.png" , "island.png" , "swamp.png", "pole.png" ],
@@ -17,41 +16,41 @@
 			     [1,0,1,0,1,0],
 			     [1,0,0,1,0,0],
 			     [1,1,0,1,0,0]],
-		monsters: [ [ { name: "Ice Bear", atk: [1],hit: [5,6],image: "bear.png" },
-			      { name: "Roving Bandits", atk: [1],hit: [6], image: "bandits.png" },
-			      { name: "Blod Wolves" , atk: [1,2], hit: [6], image: "wolves.png" },
-			      { name: "Horse Eater Hawk" , atk: [1,2,3], hit: [6], image: "hawk.png" },
-			      { name: "Giant of The Peaks" , atk: [1,2,3,4], hit: [6], image: "giant.png" }],
-			    [ { name: "Rouge Theif", atk: [1,2],hit: [5,6],image: "thief.png" },
-			      { name: "Blanket of Crows", atk: [1],hit: [6], image: "crows.png" },
-			      { name: "Hornback Bison" , atk: [1], hit: [6], image: "bison.png" },
-			      { name: "Grassyback Troll" , atk: [1,2,3], hit: [5,6], image: "troll.png" },
-			      { name: "Thunder King" , atk: [1,2,3,4], hit: [6], image: "thunder.png" }],
-			    [ { name: "Feisty Gremlin", atk: [1],hit: [5,6],image: "gremlin.png" },
-			      { name: "Glasswing Drake", atk: [1],hit: [6], image: "drake.png" },
-			      { name: "Reaching Claws" , atk: [1,2], hit: [6], image: "claws.png" },
-			      { name: "Terrible Worm" , atk: [1,2,3], hit: [6], image: "worm.png" },
-			      { name: "Leviathan Serpent" , atk: [1,2,3,4], hit: [6], image: "serpent.png" }],
-			    [ { name: "Gemscale Boa", atk: [1],hit: [5,6],image: "boa.png" },
-			      { name: "Ancient Aligator", atk: [1,2],hit: [6], image: "aligator.png" },
-			      { name: "Land Shark" , atk: [1,2], hit: [6], image: "shark.png" },
-			      { name: "Abysall Leech" , atk: [1,2,3], hit: [6], image: "leech.png" },
-			      { name: "Dweller in the Tides" , atk: [1,2,3,4], hit: [6], image: "dweller.png" }],
-			    [ { name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
-			      { name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
-			      { name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
-			      { name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
-			      { name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
-			    [ { name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
-			      { name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
-			      { name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
-			      { name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
-			      { name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
-			    [ { name: "Minor Imp", atk: [1],hit: [5,6],image: "imp.png" },
-			      { name: "Renegade Warlock", atk: [1,2],hit: [5,6], image: "warlock.png" },
-			      { name: "Gienat Flame Lizard" , atk: [1,2,3], hit: [5,6], image: "lizard.png" },
-			      { name: "Spark Elemental" , atk: [1,2,3], hit: [6], image: "elemental.png" },
-			      { name: "Volcano Spirit" , atk: [1,2,3,4], hit: [6], image: "spirit.png" }]
+		monsters: [ [ { lvl: 1, name: "Ice Bear", atk: [1],hit: [5,6],image: "bear.png" },
+			      { lvl: 2,name: "Roving Bandits", atk: [1],hit: [6], image: "bandits.png" },
+			      { lvl: 3,name: "Blod Wolves" , atk: [1,2], hit: [6], image: "wolves.png" },
+			      { lvl: 4,name: "Horse Eater Hawk" , atk: [1,2,3], hit: [6], image: "hawk.png" },
+			      { lvl: 5,name: "Giant of The Peaks" , atk: [1,2,3,4], hit: [6], image: "giant.png" }],
+			    [ { lvl: 1,name: "Rouge Theif", atk: [1,2],hit: [5,6],image: "thief.png" },
+			      { lvl: 2,name: "Blanket of Crows", atk: [1],hit: [6], image: "crows.png" },
+			      { lvl: 3,name: "Hornback Bison" , atk: [1], hit: [6], image: "bison.png" },
+			      { lvl: 4,name: "Grassyback Troll" , atk: [1,2,3], hit: [5,6], image: "troll.png" },
+			      { lvl: 5,name: "Thunder King" , atk: [1,2,3,4], hit: [6], image: "thunder.png" }],
+			    [ { lvl: 1,name: "Feisty Gremlin", atk: [1],hit: [5,6],image: "gremlin.png" },
+			      { lvl: 2,name: "Glasswing Drake", atk: [1],hit: [6], image: "drake.png" },
+			      { lvl: 3,name: "Reaching Claws" , atk: [1,2], hit: [6], image: "claws.png" },
+			      { lvl: 4,name: "Terrible Worm" , atk: [1,2,3], hit: [6], image: "worm.png" },
+			      { lvl: 5,name: "Leviathan Serpent" , atk: [1,2,3,4], hit: [6], image: "serpent.png" }],
+			    [ {  lvl: 1,name: "Gemscale Boa", atk: [1],hit: [5,6],image: "boa.png" },
+			      {  lvl: 2,name: "Ancient Aligator", atk: [1,2],hit: [6], image: "aligator.png" },
+			      {  lvl: 3,name: "Land Shark" , atk: [1,2], hit: [6], image: "shark.png" },
+			      {  lvl: 4,name: "Abysall Leech" , atk: [1,2,3], hit: [6], image: "leech.png" },
+			      {  lvl: 5,name: "Dweller in the Tides" , atk: [1,2,3,4], hit: [6], image: "dweller.png" }],
+			    [ {  lvl: 1,name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
+			      {  lvl: 2,name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
+			      {  lvl: 3,name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
+			      {  lvl: 4,name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
+			      {  lvl: 5,name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
+			    [ {  lvl: 1,name: "Grave Robbers", atk: [1],hit: [5,6],image: "robbers.png" },
+			      {  lvl: 2,name: "Ghost Lights", atk: [1],hit: [6], image: "ghost.png" },
+			      {  lvl: 3,name: "Vengefull Shade" , atk: [1,2], hit: [6], image: "shade.png" },
+			      {  lvl: 4,name: "Nightmare Crab" , atk: [1,2,3], hit: [6], image: "crab.png" },
+			      {  lvl: 5,name: "The Unnamed" , atk: [1,2,3,4], hit: [6], image: "unnamed.png" }],
+			    [ {  lvl: 1,name: "Minor Imp", atk: [1],hit: [5,6],image: "imp.png" },
+			      {  lvl: 2,name: "Renegade Warlock", atk: [1,2],hit: [5,6], image: "warlock.png" },
+			      {  lvl: 3,name: "Gienat Flame Lizard" , atk: [1,2,3], hit: [5,6], image: "lizard.png" },
+			      {  lvl: 4,name: "Spark Elemental" , atk: [1,2,3], hit: [6], image: "elemental.png" },
+			      {  lvl: 5,name: "Volcano Spirit" , atk: [1,2,3,4], hit: [6], image: "spirit.png" }]
 			      ],
 		initialSites: function () {
 		    var i;
@@ -136,14 +135,16 @@
 	     var dropdice = reduxUtils.rollDice();
 	     if (dropdice <= state.sites[active].infight ) {
 		 alert("Monster Drop Component " + state.components_names[active] );
-		 to_rep.new_components = reduxUtils.replaceItem(state.components,active,state.components[active] + 1 );
-		 to_rep.new_toast = "Monster drop " + state.sites[active].component ;
+		 new_components = reduxUtils.replaceItem(state.components,active,state.components[active] + 1 );
+		 new_toast = "Monster drop " + state.sites[active].component ;
+	     }  else {
+		 new_components = state.components.slice(0);
+		 new_toast = "Monster drop nothing";
 	     }
-
-	     to_rep.new_site = siteReducer(state.sites[active],action);
-	     to_rep.new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
-	     //	     var obj = Object.assign({},state,{sites: new_sites,lock_site: null,components: new_components });
-	     var obj = Object.assign({},state,to_rep);
+	     
+	     new_site = siteReducer(state.sites[active],action);
+	     new_sites = reduxUtils.replaceItem(state.sites,state.active_site,new_site);
+	     var obj = Object.assign({},state,{sites: new_sites,lock_site: null,components: new_components,toast: new_toast });
 	     
 	     return obj;	     
 	 case "ROLL_FIGHT":

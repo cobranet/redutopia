@@ -59,7 +59,7 @@
 		    <image class="monster_image" src="/images/monsters/[[image]]"></image>
 		</div>
 		<div class="layout vertical">
-		    <div class="stat">[[_stat(atk,hit)]]</div>
+		    <div class="stat">[[_stat(atk,hit,lvl)]]</div>
 		    <div class="name">[[name]]</div>
 		</div>
 	    </div>
@@ -80,13 +80,16 @@
 	     hit: {
 		 type: Array
 	     },
+	     lvl: {
+		 type: Number
+	     },
 	     image: {
 		 type: String
 	     }
 	     
 	 },
-	 _stat: function(atk,hit){
-	     var str = "" ;
+	 _stat: function(atk,hit,lvl){
+	     var str = "LVL: " + lvl + " ";
 	     if(atk){
 		 if ( atk[0]  ==  atk[atk.length - 1] ) {
 		     str = str + "ATK: " + atk[0];
